@@ -88,6 +88,14 @@ public static class SelfTest
         Try("one copy: a path that doesn't exist is ignored", () => true); // checked in Listen (Directory/File.Exists)
         Try("takeover: reports its state without changing anything", () => { _ = Takeover.IsOn; return true; });
         Try("open with: every code editor found is a real program, and each opens the folder as one argument", () => CodeEditors.All().All((o) => File.Exists(o.Exe) && o.Args.Contains("{0}")));
+        Try("open with: other apps' entries never get a folder named like a command, and never run a shell (Security 342)", () =>
+        {
+            var odd = P("a & calc"); Directory.CreateDirectory(odd);
+            if (!CodeEditors.RiskyForClassic(odd) || CodeEditors.RiskyForClassic(P("plain folder"))) return false;
+            try { CodeEditors.Open(new OpenWith("test", @"C:\Windows\System32\notepad.exe", "\"{0}\"", "", Classic: true), odd); return false; } catch (InvalidOperationException) { }
+            var shells = new[] { "cmd.exe", "powershell.exe", "pwsh.exe", "wt.exe", "bash.exe", "wsl.exe" };
+            return CodeEditors.All().Where((o) => o.Classic).All((o) => !shells.Contains(Path.GetFileName(o.Exe).ToLowerInvariant()) && o.Args.Contains('"'));
+        });
 
         // ---------- Stage 8 ----------
         Directory.CreateDirectory(P("ren")); foreach (var n in new[] { "a.txt", "b.txt", "c.txt" }) File.WriteAllText(P("ren", n), n);

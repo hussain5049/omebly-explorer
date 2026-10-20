@@ -26,14 +26,18 @@ public static class Updater
             var json = await http.GetStringAsync(ManifestUrl);
             using var doc = JsonDocument.Parse(json);
             var r = doc.RootElement;
-            string v = r.GetProperty("version").GetString()!, url = r.GetProperty("url").GetString()!, sha = r.GetProperty("sha256").GetString()!, sig = r.GetProperty("signature").GetString()!;
-            if (!Verify($"{v}|{url}|{sha}", sig)) return null;
+            string v = r.GetProperty("version").GetString()!, url = r.GetProperty("url").GetString()!, sha = r.GetProperty("sha256").GetString()!;
+            // The signature this version checks names the app and the processor type too, so a file signed for
+            // another Omebly app or for ARM can never be used here (Security 340). ("signature" is for 1.0.0 and 1.0.1.)
+            if (!r.TryGetProperty("signature2", out var s2) || !Verify(SignedText(v, url, sha), s2.GetString() ?? "")) return null;
             if (!url.StartsWith("https://omebly.com/", StringComparison.OrdinalIgnoreCase) && !url.StartsWith("https://github.com/hussain5049/omebly-explorer/releases/download/", StringComparison.OrdinalIgnoreCase)) return null;
             if (!Version.TryParse(v, out var ver) || ver <= Current) return null;
             return new UpdateInfo(v, url, sha);
         }
         catch { return null; }
     }
+    public static string Arch => System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString().ToLowerInvariant();
+    public static string SignedText(string version, string url, string sha256) => $"omebly-explorer|{Arch}|{version}|{url}|{sha256}";
     public static bool Verify(string message, string signatureB64)
     {
         using var k = ECDsa.Create();

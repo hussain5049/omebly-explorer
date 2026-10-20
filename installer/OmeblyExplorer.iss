@@ -5,7 +5,7 @@
 #ifndef Arch
   #define Arch "x64"
 #endif
-#define AppVersion "1.0.1"
+#define AppVersion "1.0.2"
 
 [Setup]
 AppId={{6E4F6B0C-0B1E-4C1D-9A55-0E5B0A11E0E1}

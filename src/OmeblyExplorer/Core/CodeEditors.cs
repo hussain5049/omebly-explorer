@@ -36,9 +36,17 @@ public static partial class CodeEditors
         }
     }
 
+    /// <summary>Characters a command line could read as commands if another app's template passed them on (Security 342).</summary>
+    public static bool RiskyForClassic(string folder) => folder.IndexOfAny(Risky) >= 0;
+    private static readonly char[] Risky = ['&', '|', '^', ';', '%', '!', '"', '(', ')', '<', '>', '`'];
+
     /// <summary>Opens the folder in it. The folder is passed as one quoted argument; nothing goes through a shell.</summary>
     public static void Open(OpenWith o, string folder)
     {
+        // Other apps' "open here" commands are their templates, not ours: a folder whose name has command
+        // characters is never put into one.
+        if (o.Classic && RiskyForClassic(folder))
+            throw new InvalidOperationException($"This folder's name has characters ({string.Concat(folder.Where((c) => Risky.Contains(c)).Distinct())}) that {o.Name} could read as commands, so it isn't opened this way. Use one of the editors, or rename the folder.");
         // "D:\" would end in \" and swallow the quote: "D:\." means the same folder.
         var f = folder.EndsWith('\\') ? folder + "." : folder;
         Process.Start(new ProcessStartInfo(o.Exe, o.Args.Replace("{0}", f)) { UseShellExecute = false, WorkingDirectory = Directory.Exists(folder) ? folder : "" });
@@ -90,17 +98,24 @@ public static partial class CodeEditors
                 var label = Label(k.GetValue("MUIVerb") as string ?? k.GetValue(null) as string ?? verb);
                 var (exe, args) = Split(Environment.ExpandEnvironmentVariables(cmd));
                 if (exe == null || !Path.IsPathRooted(exe) || !File.Exists(exe) || exe.EndsWith("OmeblyExplorer.exe", StringComparison.OrdinalIgnoreCase)) continue;
+                if (Shells.Contains(Path.GetFileName(exe))) continue; // a shell would read the folder name as a command line (Security 342); Open terminal here covers these
                 if (!seen.Add(exe + "|" + args)) continue;
                 if (found.Any((f) => f.Exe.Equals(exe, StringComparison.OrdinalIgnoreCase))) continue; // the editor is already there
                 // %V, %v, %1, %L and %W are the folder in Explorer's own commands.
                 args = Regex.Replace(args, "%[VvLlWw1]", "{0}");
                 if (!args.Contains("{0}")) continue;
+                if (!QuotedFolder().IsMatch(args)) continue; // the folder must sit inside quotes, or a space or symbol in its name would split it
                 var icon = k.GetValue("Icon") is string ic ? IconPath(ic) ?? exe : exe;
                 found.Add(new OpenWith(label, exe, args, icon, Classic: true));
             }
         }
         return found;
     }
+
+    private static readonly HashSet<string> Shells = new(StringComparer.OrdinalIgnoreCase)
+        { "cmd.exe", "powershell.exe", "pwsh.exe", "wt.exe", "bash.exe", "sh.exe", "wsl.exe", "conhost.exe", "openconsole.exe", "mshta.exe", "wscript.exe", "cscript.exe", "rundll32.exe", "msiexec.exe", "regsvr32.exe" };
+    [GeneratedRegex(@"""[^""]*\{0\}[^""]*""")]
+    private static partial Regex QuotedFolder();
 
     private static string? ExeOf(string? displayIcon, string? installLocation, string name)
     {
@@ -122,8 +137,9 @@ public static partial class CodeEditors
             var dir = installLocation.Trim('"');
             var bin = Path.Combine(dir, "bin");
             foreach (var d in new[] { dir, bin })
-                if (Directory.Exists(d) && Directory.GetFiles(d, "*.exe").Where((f) => !Path.GetFileName(f).StartsWith("unins", StringComparison.OrdinalIgnoreCase) && !Path.GetFileName(f).Contains("elevat", StringComparison.OrdinalIgnoreCase))
-                    .OrderByDescending((f) => Path.GetFileNameWithoutExtension(f).EndsWith("64")).ThenBy((f) => f.Length).FirstOrDefault() is { } exe) return exe;
+                if (Directory.Exists(d) && Directory.GetFiles(d, "*.exe").Where((f) => !Path.GetFileName(f).StartsWith("unins", StringComparison.OrdinalIgnoreCase) && !Path.GetFileName(f).Contains("elevat", StringComparison.OrdinalIgnoreCase) && !Path.GetFileName(f).Contains("helper", StringComparison.OrdinalIgnoreCase) && !Path.GetFileName(f).Contains("crash", StringComparison.OrdinalIgnoreCase) && !Path.GetFileName(f).Contains("update", StringComparison.OrdinalIgnoreCase))
+                    .OrderByDescending((f) => name.Contains(Path.GetFileNameWithoutExtension(f).TrimEnd('6', '4'), StringComparison.OrdinalIgnoreCase)) // named like the app first
+                    .ThenByDescending((f) => Path.GetFileNameWithoutExtension(f).EndsWith("64")).ThenBy((f) => f.Length).FirstOrDefault() is { } exe) return exe;
         }
         return null;
     }
