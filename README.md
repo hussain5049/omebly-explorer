@@ -25,6 +25,7 @@
 
 <p align="center">
   <a href="https://omebly.com/tools/explorer/">Website and guide</a> ·
+  <a href="https://omebly.com/blog/omebly-explorer-free-file-manager-windows/">Why we built it</a> ·
   <a href="#install-it">Install</a> ·
   <a href="#how-to-use-it">How to use it</a> ·
   <a href="#keyboard-shortcuts">Shortcuts</a> ·
