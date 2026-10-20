@@ -1,0 +1,120 @@
+<!-- The two approved looks: Omebly Glass (the dark theme) and Windows Light. Colours copied from the design. -->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="OxWin" Color="#9E081411" />
+            <SolidColorBrush x:Key="OxSide" Color="#6106100D" />
+            <SolidColorBrush x:Key="OxCard" Color="#0EFFFFFF" />
+            <SolidColorBrush x:Key="OxCard2" Color="#16FFFFFF" />
+            <SolidColorBrush x:Key="OxLine" Color="#14FFFFFF" />
+            <SolidColorBrush x:Key="OxLine2" Color="#24FFFFFF" />
+            <SolidColorBrush x:Key="OxText" Color="#EEF6F2" />
+            <SolidColorBrush x:Key="OxMuted" Color="#9FB6AD" />
+            <SolidColorBrush x:Key="OxFaint" Color="#6F867D" />
+            <SolidColorBrush x:Key="OxAcc" Color="#2EF2B3" />
+            <SolidColorBrush x:Key="OxAccText" Color="#03130C" />
+            <SolidColorBrush x:Key="OxWarn" Color="#FFB648" />
+            <SolidColorBrush x:Key="OxSel" Color="#292EF2B3" />
+            <SolidColorBrush x:Key="OxSelLine" Color="#8C2EF2B3" />
+            <SolidColorBrush x:Key="OxRing" Color="#1AFFFFFF" />
+            <SolidColorBrush x:Key="OxTab" Color="#12FFFFFF" />
+            <SolidColorBrush x:Key="OxStatus" Color="#2E000000" />
+            <!-- Checked view buttons and text boxes in Omebly mint, not the Windows accent colour. -->
+            <SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="#332EF2B3" />
+            <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="#442EF2B3" />
+            <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="#552EF2B3" />
+            <SolidColorBrush x:Key="ToggleButtonForegroundChecked" Color="#2EF2B3" />
+            <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPointerOver" Color="#2EF2B3" />
+            <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPressed" Color="#2EF2B3" />
+            <SolidColorBrush x:Key="ToggleButtonBackground" Color="Transparent" />
+            <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#802EF2B3" />
+            <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#26081411" />
+            <SolidColorBrush x:Key="TextControlBackground" Color="#0EFFFFFF" />
+            <SolidColorBrush x:Key="TextControlBorderBrush" Color="#14FFFFFF" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="OxWin" Color="#C7F6F8F7" />
+            <SolidColorBrush x:Key="OxSide" Color="#73F0F3F2" />
+            <SolidColorBrush x:Key="OxCard" Color="#B8FFFFFF" />
+            <SolidColorBrush x:Key="OxCard2" Color="#EBFFFFFF" />
+            <SolidColorBrush x:Key="OxLine" Color="#12000000" />
+            <SolidColorBrush x:Key="OxLine2" Color="#1F000000" />
+            <SolidColorBrush x:Key="OxText" Color="#18201D" />
+            <SolidColorBrush x:Key="OxMuted" Color="#56635E" />
+            <SolidColorBrush x:Key="OxFaint" Color="#86928D" />
+            <SolidColorBrush x:Key="OxAcc" Color="#0A9E6C" />
+            <SolidColorBrush x:Key="OxAccText" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="OxWarn" Color="#B86E00" />
+            <SolidColorBrush x:Key="OxSel" Color="#1F0A9E6C" />
+            <SolidColorBrush x:Key="OxSelLine" Color="#800A9E6C" />
+            <SolidColorBrush x:Key="OxRing" Color="#14000000" />
+            <SolidColorBrush x:Key="OxTab" Color="#BFFFFFFF" />
+            <SolidColorBrush x:Key="OxStatus" Color="#0D000000" />
+            <!-- Checked view buttons and text boxes in Omebly mint, not the Windows accent colour. -->
+            <SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="#260A9E6C" />
+            <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="#330A9E6C" />
+            <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="#400A9E6C" />
+            <SolidColorBrush x:Key="ToggleButtonForegroundChecked" Color="#0A9E6C" />
+            <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPointerOver" Color="#0A9E6C" />
+            <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPressed" Color="#0A9E6C" />
+            <SolidColorBrush x:Key="ToggleButtonBackground" Color="Transparent" />
+            <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#800A9E6C" />
+            <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#F2FFFFFF" />
+            <SolidColorBrush x:Key="TextControlBackground" Color="#B8FFFFFF" />
+            <SolidColorBrush x:Key="TextControlBorderBrush" Color="#12000000" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
+    <FontFamily x:Key="OxIcons">Segoe Fluent Icons,Segoe MDL2 Assets</FontFamily>
+    <FontFamily x:Key="OxDisplay">Segoe UI Variable Display,Segoe UI</FontFamily>
+    <FontFamily x:Key="OxTextFont">Segoe UI Variable Text,Segoe UI</FontFamily>
+
+    <!-- The folder shape used everywhere (sidebar, cards, lists), filled with each folder's colour. -->
+    <x:String x:Key="FolderPath">M2,4.5 C2,3.67 2.67,3 3.5,3 L8.1,3 C8.5,3 8.88,3.16 9.16,3.44 L10.6,4.9 C10.88,5.18 11.26,5.34 11.66,5.34 L20.5,5.34 C21.33,5.34 22,6 22,6.84 L22,18.5 C22,19.33 21.33,20 20.5,20 L3.5,20 C2.67,20 2,19.33 2,18.5 Z</x:String>
+
+    <!-- Plain buttons: no box when they can't be used (Back with no history). -->
+    <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="Transparent" />
+    <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="Transparent" />
+    <Style x:Key="OxIconButton" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+        <Setter Property="Width" Value="36" />
+        <Setter Property="Height" Value="34" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="FontFamily" Value="{StaticResource OxIcons}" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="Foreground" Value="{ThemeResource OxText}" />
+    </Style>
+    <Style x:Key="OxCardButton" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+        <Setter Property="Background" Value="{ThemeResource OxCard}" />
+        <Setter Property="BorderBrush" Value="{ThemeResource OxLine}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Foreground" Value="{ThemeResource OxText}" />
+    </Style>
+    <Style x:Key="OxChip" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+        <Setter Property="Background" Value="{ThemeResource OxCard}" />
+        <Setter Property="BorderBrush" Value="{ThemeResource OxLine}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Height" Value="38" />
+        <Setter Property="Padding" Value="12,0,14,0" />
+        <Setter Property="Foreground" Value="{ThemeResource OxText}" />
+    </Style>
+    <Style x:Key="OxSectionTitle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource OxTextFont}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{ThemeResource OxText}" />
+    </Style>
+    <Style x:Key="OxSideHeader" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="11.5" />
+        <Setter Property="Foreground" Value="{ThemeResource OxFaint}" />
+        <Setter Property="Margin" Value="12,14,0,4" />
+    </Style>
+</ResourceDictionary>

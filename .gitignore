@@ -1,0 +1,12 @@
+bin/
+obj/
+shots/
+publish/
+# Made by tools/bundle-web-tools.py from the website build (93 MB)
+src/OmeblyExplorer/WebTools/
+*.user
+.vs/
+# Raw screenshots (tools/annotate-guide.py makes docs/guide/*.jpg from them)
+docs/guide/raw/
+docs/guide/_src/banner.png
+docs/guide/web/

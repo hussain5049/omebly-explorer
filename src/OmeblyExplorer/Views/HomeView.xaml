@@ -1,0 +1,53 @@
+<UserControl
+    x:Class="OmeblyExplorer.Views.HomeView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer x:Name="Scroller" VerticalScrollBarVisibility="Auto">
+        <StackPanel Padding="40,30,40,30" Spacing="0">
+            <StackPanel Orientation="Horizontal" Spacing="14">
+                <TextBlock Text="Home" FontFamily="{StaticResource OxDisplay}" FontSize="30" FontWeight="SemiBold" />
+                <TextBlock Text="Everything on this PC, in one place" VerticalAlignment="Bottom" Margin="0,0,0,5" FontSize="14" Foreground="{ThemeResource OxMuted}" />
+            </StackPanel>
+
+            <Grid Margin="0,26,0,10">
+                <TextBlock Text="Drives" Style="{StaticResource OxSectionTitle}" />
+                <HyperlinkButton x:Name="OpenThisPc" Content="Open This PC" HorizontalAlignment="Right" Padding="0" Foreground="{ThemeResource OxAcc}" />
+            </Grid>
+            <ItemsRepeater x:Name="DrivesList">
+                <ItemsRepeater.Layout>
+                    <UniformGridLayout MinItemWidth="250" MinItemHeight="84" MinColumnSpacing="12" MinRowSpacing="12" ItemsStretch="Fill" MaximumRowsOrColumns="4" />
+                </ItemsRepeater.Layout>
+            </ItemsRepeater>
+
+            <TextBlock Text="Quick actions" Style="{StaticResource OxSectionTitle}" Margin="0,26,0,10" />
+            <ScrollViewer HorizontalScrollMode="Auto" HorizontalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Disabled">
+                <ItemsRepeater x:Name="ActionsList">
+                    <ItemsRepeater.Layout>
+                        <StackLayout Orientation="Horizontal" Spacing="10" />
+                    </ItemsRepeater.Layout>
+                </ItemsRepeater>
+            </ScrollViewer>
+
+            <Grid Margin="0,26,0,10">
+                <TextBlock Text="Pinned folders" Style="{StaticResource OxSectionTitle}" />
+                <HyperlinkButton x:Name="EditPins" Content="Edit" HorizontalAlignment="Right" Padding="0" Foreground="{ThemeResource OxAcc}" />
+            </Grid>
+            <ItemsRepeater x:Name="PinsList">
+                <ItemsRepeater.Layout>
+                    <UniformGridLayout MinItemWidth="170" MinItemHeight="108" MinColumnSpacing="12" MinRowSpacing="12" ItemsStretch="Fill" MaximumRowsOrColumns="6" />
+                </ItemsRepeater.Layout>
+            </ItemsRepeater>
+            <TextBlock x:Name="NoPins" Visibility="Collapsed" Foreground="{ThemeResource OxMuted}" Text="Right-click any folder and choose Pin to Home to keep it here." />
+
+            <Grid Margin="0,26,0,10">
+                <TextBlock Text="Recent files" Style="{StaticResource OxSectionTitle}" />
+            </Grid>
+            <ItemsRepeater x:Name="RecentList">
+                <ItemsRepeater.Layout>
+                    <UniformGridLayout MinItemWidth="170" MinItemHeight="152" MinColumnSpacing="12" MinRowSpacing="12" ItemsStretch="Fill" MaximumRowsOrColumns="6" />
+                </ItemsRepeater.Layout>
+            </ItemsRepeater>
+            <TextBlock x:Name="NoRecent" Visibility="Collapsed" Foreground="{ThemeResource OxMuted}" Text="Files you open will show here." />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Omebly Explorer: a free, open-source file manager for Windows (WinUI 3, unpackaged, self-contained). -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RootNamespace>OmeblyExplorer</RootNamespace>
+    <AssemblyName>OmeblyExplorer</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Platforms>x86;x64;ARM64</Platforms>
+    <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+    <UseWinUI>true</UseWinUI>
+    <WindowsPackageType>None</WindowsPackageType>
+    <!-- Makes 'dotnet publish' include the app's compiled XAML (OmeblyExplorer.pri); without it the window can't load. -->
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <SelfContained>true</SelfContained>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <ApplicationIcon>Assets\OmeblyExplorer.ico</ApplicationIcon>
+    <Product>Omebly Explorer</Product>
+    <Company>Omebly</Company>
+    <Version>1.0.0</Version>
+    <!-- Fast start-up and a small download. -->
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentFTP" Version="55.1.0" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.5.1" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2705" />
+    <PackageReference Include="PDFsharp" Version="6.2.4" />
+    <PackageReference Include="SharpCompress" Version="0.50.7" />
+    <PackageReference Include="SharpZipLib" Version="1.4.2" />
+    <PackageReference Include="SSH.NET" Version="2026.0.0" />
+    <PackageReference Include="System.Data.OleDb" Version="10.0.13" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\**" CopyToOutputDirectory="PreserveNewest" />
+    <!-- The Omebly Tools PDF tools (tools/bundle-web-tools.py). -->
+    <Content Include="WebTools\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
