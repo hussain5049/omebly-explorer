@@ -28,7 +28,7 @@ public static class Updater
             var r = doc.RootElement;
             string v = r.GetProperty("version").GetString()!, url = r.GetProperty("url").GetString()!, sha = r.GetProperty("sha256").GetString()!, sig = r.GetProperty("signature").GetString()!;
             if (!Verify($"{v}|{url}|{sha}", sig)) return null;
-            if (!url.StartsWith("https://omebly.com/", StringComparison.OrdinalIgnoreCase) && !url.StartsWith("https://github.com/", StringComparison.OrdinalIgnoreCase)) return null;
+            if (!url.StartsWith("https://omebly.com/", StringComparison.OrdinalIgnoreCase) && !url.StartsWith("https://github.com/hussain5049/omebly-explorer/releases/download/", StringComparison.OrdinalIgnoreCase)) return null;
             if (!Version.TryParse(v, out var ver) || ver <= Current) return null;
             return new UpdateInfo(v, url, sha);
         }

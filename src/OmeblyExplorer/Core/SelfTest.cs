@@ -87,6 +87,7 @@ public static class SelfTest
         });
         Try("one copy: a path that doesn't exist is ignored", () => true); // checked in Listen (Directory/File.Exists)
         Try("takeover: reports its state without changing anything", () => { _ = Takeover.IsOn; return true; });
+        Try("open with: every code editor found is a real program, and each opens the folder as one argument", () => CodeEditors.All().All((o) => File.Exists(o.Exe) && o.Args.Contains("{0}")));
 
         // ---------- Stage 8 ----------
         Directory.CreateDirectory(P("ren")); foreach (var n in new[] { "a.txt", "b.txt", "c.txt" }) File.WriteAllText(P("ren", n), n);

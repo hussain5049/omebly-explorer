@@ -903,6 +903,7 @@ public sealed partial class MainWindow : Window
         var m = new MenuFlyout();
         m.Items.Add(Item("Open", "\uE8DA", () => Navigate(p.Path)));
         m.Items.Add(Item("Open in new tab", "\uE737", () => AddTab(p.Path)));
+        AddOpenWith(m, p.Path);
         var colors = new MenuFlyoutSubItem { Text = "Colour", Icon = new FontIcon { Glyph = "\uE790" } };
         foreach (var c in Settings.PinColors)
         {
@@ -993,6 +994,7 @@ public sealed partial class MainWindow : Window
         {
             m.Items.Add(Item("Open", "\uE8E5", () => OpenItem(item)));
             if (item.IsFolder) m.Items.Add(Item("Open in new tab", "\uE737", () => AddTab(item.Path)));
+            if (item.IsFolder && sel.Count == 1) AddOpenWith(m, item.Path);
             else m.Items.Add(Item("Open with…", "\uE7AC", () => Native.ShellRun(item.Path, "openas", _hwnd)));
             m.Items.Add(new MenuFlyoutSeparator());
             m.Items.Add(Item("Cut", "\uE8C6", () => _ = Core.Clip.Put(sel, true), "Ctrl+X"));
@@ -1060,9 +1062,46 @@ public sealed partial class MainWindow : Window
             m.Items.Add(pin == null ? Item("Pin this folder to Home", "\uE718", () => Pin(here)) : Item("Unpin this folder", "\uE77A", () => Unpin(pin)));
             AddFolderOrganize(m, here);
             m.Items.Add(Item("Open terminal here", "\uE756", () => Terminal(here)));
+            AddOpenWith(m, here);
             m.Items.Add(Item("Properties", "\uE946", () => Native.ShellRun(here, "properties", _hwnd)));
         }
         if (m.Items.Count > 0) m.ShowAt(target, at);
+    }
+    // "Open with VS Code", "Open with Antigravity", "Open in Visual Studio", "Open Git Bash here"…: every code editor
+    // and IDE on this PC, with its own icon, like File Explorer's menu.
+    private void AddOpenWith(MenuFlyout m, string folder)
+    {
+        MenuFlyoutItem Entry(OpenWith o)
+        {
+            var mi = new MenuFlyoutItem { Text = o.Name.StartsWith("Open", StringComparison.OrdinalIgnoreCase) ? o.Name : "Open with " + o.Name };
+            mi.Icon = AppIcon(o.IconSource) ?? new FontIcon { Glyph = "\uE943" };
+            mi.Click += async (_, _) => { try { CodeEditors.Open(o, folder); } catch (Exception e) { await Message($"Couldn't open {o.Name}", e.Message); } };
+            return mi;
+        }
+        var all = CodeEditors.All();
+        foreach (var o in all.Where((o) => !o.Classic)) m.Items.Add(Entry(o)); // the editors, straight on the menu
+        var classic = all.Where((o) => o.Classic).ToList(); // other apps' "open here" entries, together, so the menu stays short
+        if (classic.Count == 1) m.Items.Add(Entry(classic[0]));
+        else if (classic.Count > 1)
+        {
+            var sub = new MenuFlyoutSubItem { Text = "Open here with", Icon = new FontIcon { Glyph = "\uE8A7" } };
+            foreach (var o in classic) sub.Items.Add(Entry(o));
+            m.Items.Add(sub);
+        }
+    }
+    private static readonly Dictionary<string, ImageSource> AppIcons = new(StringComparer.OrdinalIgnoreCase);
+    private static IconElement? AppIcon(string path)
+    {
+        if (!AppIcons.TryGetValue(path, out var src))
+        {
+            if (Native.GetImage(path, 32, Native.SIIGBF.IconOnly | Native.SIIGBF.BiggerSizeOk) is not { } img) return null;
+            var (px, w, h) = img;
+            var wb = new Microsoft.UI.Xaml.Media.Imaging.WriteableBitmap(w, h);
+            using (var st = System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.AsStream(wb.PixelBuffer)) st.Write(px, 0, px.Length);
+            wb.Invalidate();
+            AppIcons[path] = src = wb;
+        }
+        return new ImageIcon { Source = src };
     }
     private static MenuFlyoutItem Item(string text, string? glyph, Action run, string? keys = null)
     {
@@ -1733,6 +1772,7 @@ public sealed partial class MainWindow : Window
         var m = new MenuFlyout();
         m.Items.Add(Item("Open", "\uE8DA", () => Navigate(d.Root)));
         m.Items.Add(Item("Open in new tab", "\uE737", () => AddTab(d.Root)));
+        AddOpenWith(m, d.Root);
         if (d.Removable) m.Items.Add(Item("Eject", "\uF847", () => { Extras.Eject(d.Root); ShowNote($"Ejecting {d.Name}"); }));
         m.Items.Add(new MenuFlyoutSeparator());
         var tools = new MenuFlyoutSubItem { Text = "Drive tools", Icon = new FontIcon { Glyph = "\uE90F" } };
